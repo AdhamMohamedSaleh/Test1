@@ -89,7 +89,7 @@ export function PageSelector() {
   );
 
   return (
-    <Card className="w-full py-2 max-w-lg px-5">
+    <Card className="w-full pb-2 max-w-lg px-5">
       <div className="px-2 pt-4 pb-2">
         <RowWrapper item={allPagesItem}>
           <label className="text-lg font-normal pointer-events-none text-[#1F2128]">
@@ -126,7 +126,7 @@ export function PageSelector() {
 
       <div className="pt-4">
         <div className="border-t py-2 border-gray-300" />
-        <div className="py-2">
+        <div className="py-3">
           <button className="mb-2 w-full rounded-sm py-3 bg-[#FFCE22] cursor-pointer active:bg-[#FFCE22] text-[#1F2128] text-lg hover:bg-[#FFD84D]">
             Done
           </button>

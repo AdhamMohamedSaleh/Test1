@@ -1,7 +1,6 @@
 "use client";
 import { useState, ReactNode } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 interface PageItem {
@@ -48,19 +47,39 @@ export function PageSelector() {
     const item = pages.find((p) => p.id === itemId)!;
     const isHovered = hoveredId === itemId;
     const isPressed = pressedId === itemId;
-    const isUnchecked = !item.checked;
+    const isChecked = item.checked;
 
-    return cn(
-      "h-8 w-8 rounded-[6px] border cursor-pointer",
-      isPressed && isUnchecked && "shadow-[0_0_0_2px_rgba(100,150,255,0.25)]",
-      item.checked
-        ? isHovered
-          ? "border-[rgb(100,150,255)] bg-[rgb(100,150,255)]"
-          : "border-[rgb(80,135,248)] bg-[rgb(80,135,248)]"
-        : isHovered
-        ? "border-gray-300"
-        : "border-gray-200"
-    );
+    // Unchecked states
+    if (!isChecked) {
+      if (isPressed) {
+        // State 3: Unchecked + Pressed
+        return cn(
+          "border-[1px] border-[#BDBDBD] bg-white cursor-pointer",
+          "shadow-[0_0_0_3px_rgba(36,105,246,0.1)]"
+        );
+      }
+      if (isHovered) {
+        // State 2: Unchecked + Hover
+        return cn("border-[1px] border-[#BDBDBD] bg-white cursor-pointer");
+      }
+      // State 1: Unchecked + Default
+      return cn("border-[1px] bg-white cursor-pointer", "border-[#CDCDCD]/60");
+    }
+
+    // Checked states
+    if (isPressed) {
+      // State 7: Checked + Pressed (to uncheck)
+      return cn(
+        "bg-[#2469F6] border-[#2469F6] cursor-pointer",
+        "shadow-[0_0_0_3px_rgba(36,105,246,0.1)]"
+      );
+    }
+    if (isHovered) {
+      // State 4: Checked + Hover (to uncheck)
+      return cn("bg-[#5087F8] border-[#5087F8] cursor-pointer");
+    }
+    // State 5: Checked + Default
+    return cn("bg-[#2469F6] border-[#2469F6] cursor-pointer");
   };
 
   const RowWrapper = ({
@@ -71,7 +90,7 @@ export function PageSelector() {
     children: ReactNode;
   }) => (
     <div
-      className="flex items-center justify-between py-4 cursor-pointer select-none"
+      className="h-10.5 bg-white flex items-center justify-between pt-2 pr-3.75 pb-2 pl-5.5 cursor-pointer select-none"
       onMouseEnter={() => setHoveredId(item.id)}
       onMouseLeave={() => {
         setHoveredId(null);
@@ -89,12 +108,20 @@ export function PageSelector() {
   );
 
   return (
-    <Card className="w-full pb-2 max-w-lg px-5">
-      <div className="px-2 pt-4 pb-2">
-        <RowWrapper item={allPagesItem}>
-          <label className="text-lg font-normal pointer-events-none text-[#1F2128]">
+    <div
+      className="w-92.5 bg-white border border-[#EEEEEE] rounded-[6px] py-2.5"
+      style={{
+        boxShadow:
+          "0 8px 15px 0 rgba(20, 20, 20, 0.12), 0 0px 4px 0 rgba(20, 20, 20, 0.10)",
+      }}
+    >
+      {/* All pages */}
+      <RowWrapper item={allPagesItem}>
+        <div className="w-92.5 h-10.5 cursor-pointer bg-white flex items-center justify-between pr-3">
+          <label className="text-[14px] font-normal leading-[130%] tracking-[0px] pointer-events-none text-[#1F2128]">
             {allPagesItem.label}
           </label>
+
           <Checkbox
             checked={allPagesItem.checked}
             data-hovered={hoveredId === allPagesItem.id}
@@ -102,36 +129,42 @@ export function PageSelector() {
             onCheckedChange={() => handleCheckboxChange(allPagesItem.id)}
             className={getCheckboxClasses(allPagesItem.id)}
           />
-        </RowWrapper>
+        </div>
+      </RowWrapper>
+
+      <div className="w-92.5 h-5 flex items-center py-2.5 px-3.75 gap-2.5">
+        <div className="flex-1 border-t-[0.7px] border-[#CDCDCD]" />
       </div>
 
-      <div className="border-t py-2 border-gray-300" />
-
-      <div className="max-h-64 overflow-y-auto px-2 scrollbar-hide">
+      <div className="max-h-41 overflow-y-auto overflow-x-hidden scrollbar-hide">
         {pageItems.map((page) => (
           <RowWrapper key={page.id} item={page}>
-            <label className="text-lg font-normal pointer-events-none text-[#1F2128]">
+            <label className="text-[14px] font-normal leading-[130%] tracking-[0px] pointer-events-none text-[#1F2128]">
               {page.label}
             </label>
-            <Checkbox
-              checked={page.checked}
-              data-hovered={hoveredId === page.id}
-              data-pressed={pressedId === page.id}
-              onCheckedChange={() => handleCheckboxChange(page.id)}
-              className={getCheckboxClasses(page.id)}
-            />
+
+            <div className="w-8.75 h-8.75">
+              <Checkbox
+                checked={page.checked}
+                data-hovered={hoveredId === page.id}
+                data-pressed={pressedId === page.id}
+                onCheckedChange={() => handleCheckboxChange(page.id)}
+                className={getCheckboxClasses(page.id)}
+              />
+            </div>
           </RowWrapper>
         ))}
       </div>
 
-      <div className="pt-4">
-        <div className="border-t py-2 border-gray-300" />
-        <div className="py-3">
-          <button className="mb-2 w-full rounded-sm py-3 bg-[#FFCE22] cursor-pointer active:bg-[#FFCE22] text-[#1F2128] text-lg hover:bg-[#FFD84D]">
-            Done
-          </button>
-        </div>
+      <div className="w-92.5 h-5 flex items-center py-2.5 px-3.75 gap-2.5">
+        <div className="flex-1 border-t-[0.7px] border-[#CDCDCD]" />
       </div>
-    </Card>
+
+      <div className="justify-center my-2.5 flex items-center">
+        <button className="w-85 h-10 rounded-sm text-center text-[14px] font-normal leading-[130%] tracking-[0px] text-[#1F2128] bg-[#FFCE22] cursor-pointer active:bg-[#FFCE22] hover:bg-[#FFD84D] pt-2.5 pr-5 pb-2.5 pl-5 gap-2.5">
+          Done
+        </button>
+      </div>
+    </div>
   );
 }

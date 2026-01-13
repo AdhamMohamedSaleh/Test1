@@ -17,35 +17,39 @@ function Checkbox({
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        "peer relative focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-7 shrink-0 rounded-lg border shadow-xs outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        "peer relative shrink-0 outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-none",
         className
       )}
+      style={{
+        width: "23px",
+        height: "23px",
+        borderRadius: "6px",
+      }}
       {...props}
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className="grid place-content-center transition-none"
+        className="absolute inset-0 flex items-center justify-center transition-none"
       >
         <CheckIcon
-          className="size-8"
           strokeWidth={1}
-          style={
-            isPressed && !props.checked
-              ? { color: "#1F2128" }
-              : { color: "white" }
-          }
+          style={{
+            width: "25px",
+            height: "25px",
+            color: "white",
+          }}
         />
       </CheckboxPrimitive.Indicator>
 
-      {/* Faint checkmark on hover when unchecked */}
-      {isHovered && !props.checked && (
-        <div className="grid place-content-center absolute inset-0 pointer-events-none">
+      {/* Faint checkmark on hover/press when unchecked */}
+      {(isHovered || isPressed) && !props.checked && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-none">
           <CheckIcon
-            className="size-8"
             strokeWidth={1}
             style={{
-              color: isPressed ? "#1F2128" : "rgb(107, 114, 128)",
-              opacity: isPressed ? 1 : 0.3,
+              width: "25px",
+              height: "25px",
+              color: isPressed ? "#878787" : "#E3E3E3",
             }}
           />
         </div>

@@ -90,7 +90,7 @@ export function PageSelector() {
     children: ReactNode;
   }) => (
     <div
-      className="h-10.5 bg-white flex items-center justify-between pt-2 pr-3.75 pb-2 pl-5.5 cursor-pointer select-none"
+      className="h-10.5 bg-white flex items-center justify-between pt-2 -my-px pr-3.75 pb-2 pl-5.5 cursor-pointer select-none"
       onMouseEnter={() => setHoveredId(item.id)}
       onMouseLeave={() => {
         setHoveredId(null);
